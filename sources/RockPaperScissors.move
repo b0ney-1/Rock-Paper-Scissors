@@ -44,7 +44,7 @@ module metaschool::RockPaperScissors_f {
         let computer_selection = &result.computer_selection;
 
         if (user_selection == *computer_selection) {
-            result.duel_result = utf8(b"Draw");
+            result.duel_result = utf8(b"Draw"); // Draw
         } else if ((user_selection == utf8(b"Rock") && *computer_selection == utf8(b"Scissors")) ||
                    (user_selection == utf8(b"Paper") && *computer_selection == utf8(b"Rock")) ||
                    (user_selection == utf8(b"Scissors") && *computer_selection == utf8(b"Paper"))) {
