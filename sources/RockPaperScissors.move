@@ -1,4 +1,4 @@
-module metaschool::RockPaperScissors_d {
+module metaschool::RockPaperScissors_e {
     use std::string::{String,utf8};
     use std::signer;
     use aptos_framework::randomness;
@@ -21,25 +21,8 @@ module metaschool::RockPaperScissors_d {
         }
     }
 
-    #[lint::allow_unsafe_randomness]
-    public entry fun duel(account: &signer, user_selection: String) acquires DuelResult {
-        generateRandomSelection(account);
-        let brain = borrow_global_mut<DuelResult>(signer::address_of(account));
-        let computer_selection = &brain.computer_selection;
-
-        if (user_selection == *computer_selection) {
-            brain.duel_result = false; // tie
-        } else if ((user_selection == utf8(b"Rock") && *computer_selection == utf8(b"Scissors")) ||
-                   (user_selection == utf8(b"Paper") && *computer_selection == utf8(b"Rock")) ||
-                   (user_selection == utf8(b"Scissors") && *computer_selection == utf8(b"Paper"))) {
-            brain.duel_result = true; // User wins
-        } else {
-            brain.duel_result = false; // Computer wins
-        }
-    }
-
     #[randomness]
-    entry fun generateRandomSelection(account: &signer)acquires DuelResult  {
+    entry fun duel(account: &signer, user_selection: String) acquires DuelResult {
         let random_number = randomness::u64_range(0, 3); // 3 is exclusive
         let result = borrow_global_mut<DuelResult>(signer::address_of(account));
         if(random_number==0)
@@ -57,5 +40,17 @@ module metaschool::RockPaperScissors_d {
                 result.computer_selection = utf8(b"Scissors");
             }
         }   
+
+        let computer_selection = &brain.computer_selection;
+
+        if (user_selection == *computer_selection) {
+            brain.duel_result = false; // tie
+        } else if ((user_selection == utf8(b"Rock") && *computer_selection == utf8(b"Scissors")) ||
+                   (user_selection == utf8(b"Paper") && *computer_selection == utf8(b"Rock")) ||
+                   (user_selection == utf8(b"Scissors") && *computer_selection == utf8(b"Paper"))) {
+            brain.duel_result = true; // User wins
+        } else {
+            brain.duel_result = false; // Computer wins
+        }
     }
 }
